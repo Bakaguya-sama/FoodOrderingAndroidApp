@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "696716329786",
+    "project_id": "foodorderingapp11",
+    "storage_bucket": "foodorderingapp11.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:696716329786:android:e791676126e766ace10603",
+        "android_client_info": {
+          "package_name": "com.example.foodorderingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_Aljf4Ni7CAgezpBj6KoC6zTO_OyBtWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
