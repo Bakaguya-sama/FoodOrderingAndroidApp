@@ -1,6 +1,8 @@
 package com.example.foodorderingapp.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.example.foodorderingapp.Activity.ListFoodsActivity;
 import com.example.foodorderingapp.Domain.Category;
 import com.example.foodorderingapp.Domain.Foods;
 import com.example.foodorderingapp.R;
@@ -37,7 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewho
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.viewholder holder, int position) {
+    public void onBindViewHolder(@NonNull CategoryAdapter.viewholder holder, @SuppressLint("RecyclerView") int position) {
 
         holder.titleText.setText(items.get(position).getName());
         switch (position) {
@@ -78,6 +81,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.viewho
         Glide.with(context)
                 .load(drawableResourcesId)
                 .into(holder.pic);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ListFoodsActivity.class);
+                intent.putExtra("CategoryId", items.get(position).getId());
+                intent.putExtra("CategoryName", items.get(position).getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
