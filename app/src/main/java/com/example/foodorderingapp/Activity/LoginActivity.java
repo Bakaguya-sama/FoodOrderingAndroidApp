@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 public class LoginActivity extends BaseActivity {
+
     ActivityLoginBinding binding;
 
     @Override
@@ -34,6 +35,10 @@ public class LoginActivity extends BaseActivity {
         });
 
         setVariable();
+    }
+
+    public void onClick_CreateAccount_Login(View view) {
+        startActivity(new Intent(this, SignupActivity.class));
     }
 
     private void setVariable() {

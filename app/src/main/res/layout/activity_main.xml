@@ -215,11 +215,13 @@
                     android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/textView10"
+                    android:id="@+id/textView_ViewAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="VIEW ALL"
-                    android:textColor="@color/red"/>
+                    android:textColor="@color/red"
+                    android:clickable="true"
+                    android:focusable="true" />
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

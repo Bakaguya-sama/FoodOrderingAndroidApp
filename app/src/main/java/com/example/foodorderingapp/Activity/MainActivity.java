@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -35,18 +36,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
     private ActivityMainBinding binding;
+    private ArrayList<Foods> bestFoodList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+//      setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding.textViewViewAll.setOnClickListener(v -> onClick_ViewAll_Main(v));
+
 
         initLocation();
         initTime();
@@ -54,6 +60,12 @@ public class MainActivity extends BaseActivity {
         initBestFood();
         initCategory();
         setVariable();
+    }
+
+    private void onClick_ViewAll_Main (View view) {
+        Intent intent = new Intent(MainActivity.this, ViewAll_Main_Activity.class);
+        intent.putExtra("bestFoodList", bestFoodList);
+        startActivity(intent);
     }
     private void setVariable(){
         binding.logOutBtn.setOnClickListener(v->{
@@ -72,25 +84,25 @@ public class MainActivity extends BaseActivity {
 
         });
         binding.cartBtn.setOnClickListener(v->{
-                startActivity(new Intent(MainActivity.this, CartActivity.class));
+            startActivity(new Intent(MainActivity.this, CartActivity.class));
         });
     }
 
     private void initBestFood() {
         DatabaseReference myRef = database.getReference("Foods");
         binding.progressBarBestFood.setVisibility(View.VISIBLE);
-        ArrayList<Foods> list = new ArrayList<>();
+//        ArrayList<Foods> list = new ArrayList<>();
         Query query = myRef.orderByChild("BestFood").equalTo(true);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     for (DataSnapshot issue : snapshot.getChildren()) {
-                        list.add(issue.getValue(Foods.class));
+                        bestFoodList.add(issue.getValue(Foods.class));
                     }
-                    if (list.size() > 0) {
+                    if (bestFoodList.size() > 0) {
                         binding.bestFoodView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false));
-                        RecyclerView.Adapter adapter = new BestFoodsAdapter(list);
+                        RecyclerView.Adapter adapter = new BestFoodsAdapter(bestFoodList);
                         binding.bestFoodView.setAdapter(adapter);
                     }
                     binding.progressBarBestFood.setVisibility(View.GONE);
