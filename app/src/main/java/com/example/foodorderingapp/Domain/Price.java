@@ -7,6 +7,11 @@ public class Price {
     public Price() {
     }
 
+    public Price(int id, String value) {
+        Id = id;
+        Value = value;
+    }
+
     public int getId() {
         return Id;
     }

@@ -2,6 +2,7 @@ package com.example.foodorderingapp.Activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -71,11 +72,15 @@ private Boolean isSearch;
                         binding.foodListView.setLayoutManager(new GridLayoutManager(ListFoodsActivity.this,2));
                         adapterListFood=new FoodListAdapter(list);
                         binding.foodListView.setAdapter(adapterListFood);
-
-
                     }
-                    binding.progressBar3.setVisibility(View.GONE);
+                    else {
+                        binding.textView11.setVisibility(View.VISIBLE); // Hiện text nếu list rỗng
+                    }
+                } else {
+                    // Trường hợp snapshot KHÔNG tồn tại (không có dữ liệu)
+                    binding.textView11.setVisibility(View.VISIBLE);
                 }
+                binding.progressBar3.setVisibility(View.GONE); // LUÔN ẩn progressBar sau khi xử lý
             }
 
             @Override

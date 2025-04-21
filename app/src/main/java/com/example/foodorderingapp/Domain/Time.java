@@ -7,6 +7,11 @@ public class Time {
     public Time() {
     }
 
+    public Time(int id, String value) {
+        Id = id;
+        Value = value;
+    }
+
     public int getId() {
         return Id;
     }

@@ -9,7 +9,9 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,7 @@ import com.google.firebase.auth.AuthResult;
 public class SignupActivity extends BaseActivity {
 
     ActivitySignupBinding binding;
+    private EditText emailEdit, passEdit, reEnterPassEdit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +45,9 @@ public class SignupActivity extends BaseActivity {
             return insets;
         });
 
+        emailEdit = findViewById(R.id.emailEdit);
+        passEdit = findViewById(R.id.passEdit);
+        reEnterPassEdit = findViewById(R.id.reEnterPassEdit);
         setVariable();
         TextView textView = findViewById(R.id.textView5);
         String fullText = "Are you a member? Login";
@@ -70,7 +76,6 @@ public class SignupActivity extends BaseActivity {
         textView.setMovementMethod(LinkMovementMethod.getInstance());
         textView.setHighlightColor(Color.TRANSPARENT);
     }
-
     private void setVariable() {
         binding.signupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,16 +83,27 @@ public class SignupActivity extends BaseActivity {
                 String email = binding.emailEdit.getText().toString();
                 String pass = binding.passEdit.getText().toString();
 
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(SignupActivity.this, "Invalid email format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (pass.length() < 6) {
                     Toast.makeText(SignupActivity.this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (!pass.equals(binding.reEnterPassEdit.getText().toString())) {
+                    Toast.makeText(SignupActivity.this, "Password does not match", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignupActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.i(TAG, "onComplete: ");
-                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                            Toast.makeText(SignupActivity.this, "Sign up successfully", Toast.LENGTH_SHORT).show();
+                            startActivity( new Intent(SignupActivity.this, MainActivity.class));
+                            finish();
                         } else {
                             Log.i(TAG, "failure: " + task.getException());
                             Toast.makeText(SignupActivity.this, "Authentication failed", Toast.LENGTH_SHORT).show();

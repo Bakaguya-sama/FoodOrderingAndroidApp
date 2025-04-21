@@ -7,6 +7,11 @@ public class Location {
     public Location() {
     }
 
+    public Location(int id, String loc) {
+        Id = id;
+        Loc = loc;
+    }
+
     public int getId() {
         return Id;
     }
