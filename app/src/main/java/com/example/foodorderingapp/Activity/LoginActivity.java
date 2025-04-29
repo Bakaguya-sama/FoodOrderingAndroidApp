@@ -1,8 +1,12 @@
 package com.example.foodorderingapp.Activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -34,7 +38,36 @@ public class LoginActivity extends BaseActivity {
             return insets;
         });
 
+        setupPasswordToggle(findViewById(R.id.passEdit), findViewById(R.id.eye_pass_login));
         setVariable();
+        binding.textViewForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, EmailEnteringActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void setupPasswordToggle(EditText editText, ImageView eyeIcon) {
+        final boolean[] isVisible = {false};
+        final Typeface originalTypeface = editText.getTypeface(); // Lưu lại font gốc
+
+        eyeIcon.setOnClickListener(v -> {
+            if (isVisible[0]) {
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                eyeIcon.setImageResource(R.drawable.visibility_off);
+            } else {
+                editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                eyeIcon.setImageResource(R.drawable.visibility_on);
+            }
+
+            // Restore font sau khi thay đổi inputType
+            editText.setTypeface(originalTypeface);
+            editText.setSelection(editText.getText().length());
+
+            isVisible[0] = !isVisible[0];
+        });
     }
 
     public void onClick_CreateAccount_Login(View view) {

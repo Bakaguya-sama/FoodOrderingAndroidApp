@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.example.foodorderingapp.Domain.Location;
 import com.example.foodorderingapp.Domain.Price;
 import com.example.foodorderingapp.Domain.Time;
 import com.example.foodorderingapp.R;
+import com.example.foodorderingapp.databinding.ActivityAccountBinding;
 import com.example.foodorderingapp.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,7 +49,15 @@ public class MainActivity extends BaseActivity {
         EdgeToEdge.enable(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentViewInBase(binding.getRoot());
+        setupBottomNav();
+//        setContentView(binding.getRoot());
+        // Thay vì setContentView(binding.getRoot())
+        // Ta thêm vào FrameLayout trong activity_base.xml
+//        FrameLayout contentFrame = findViewById(R.id.content_frame);
+//        contentFrame.addView(binding.getRoot());
+//        binding= ActivityMainBinding.inflate(getLayoutInflater());
+//        super.setContentView(R.layout.activity_main);
 
 //        txtView_Username = findViewById(R.id.txtView_Username);
 //        String email = getIntent().getStringExtra("email");
@@ -67,12 +77,13 @@ public class MainActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         binding.textViewViewAll.setOnClickListener(v -> onClick_ViewAll_Main(v));
 
 
-        initLocation();
-        initTime();
-        initPrice();
+//        initLocation();
+//        initTime();
+//        initPrice();
         initBestFood();
         initCategory();
 
@@ -92,10 +103,10 @@ public class MainActivity extends BaseActivity {
             // Gọi lại initBestFood() để chỉ hiện BestFood mà không filter gì
             initBestFood();
 
-            // Reset Spinner nếu bạn muốn
-            binding.locationSpinner.setSelection(0);
-            binding.timeSpinner.setSelection(0);
-            binding.priceSpinner.setSelection(0);
+//            // Reset Spinner nếu bạn muốn
+//            binding.locationSpinner.setSelection(0);
+//            binding.timeSpinner.setSelection(0);
+//            binding.priceSpinner.setSelection(0);
 
             Toast.makeText(MainActivity.this, "Đã hiển thị món ăn nổi bật", Toast.LENGTH_SHORT).show();
         });
@@ -105,7 +116,7 @@ public class MainActivity extends BaseActivity {
         binding.logOutBtn.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-
+            finish();
         });
         binding.searchBtn.setOnClickListener(v -> {
             String text = binding.searchEdt.getText().toString();
@@ -120,20 +131,20 @@ public class MainActivity extends BaseActivity {
             startActivity(new Intent(MainActivity.this, CartActivity.class));
         });
 
-        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                triggerFilter();
-            }
+//        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                triggerFilter();
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        };
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        };
-
-        binding.locationSpinner.setOnItemSelectedListener(spinnerListener);
-        binding.timeSpinner.setOnItemSelectedListener(spinnerListener);
-        binding.priceSpinner.setOnItemSelectedListener(spinnerListener);
+//        binding.locationSpinner.setOnItemSelectedListener(spinnerListener);
+//        binding.timeSpinner.setOnItemSelectedListener(spinnerListener);
+//        binding.priceSpinner.setOnItemSelectedListener(spinnerListener);
     }
 
     private void filterFoods(int locationId, int timeId, int priceId) {
@@ -183,15 +194,15 @@ public class MainActivity extends BaseActivity {
     }
 
 
-    private void triggerFilter() {
-        Location selectedLocation = (Location) binding.locationSpinner.getSelectedItem();
-        Time selectedTime = (Time) binding.timeSpinner.getSelectedItem();
-        Price selectedPrice = (Price) binding.priceSpinner.getSelectedItem();
-
-        if (selectedLocation != null && selectedTime != null && selectedPrice != null) {
-            filterFoods(selectedLocation.getId(), selectedTime.getId(), selectedPrice.getId());
-        }
-    }
+//    private void triggerFilter() {
+//        Location selectedLocation = (Location) binding.locationSpinner.getSelectedItem();
+//        Time selectedTime = (Time) binding.timeSpinner.getSelectedItem();
+//        Price selectedPrice = (Price) binding.priceSpinner.getSelectedItem();
+//
+//        if (selectedLocation != null && selectedTime != null && selectedPrice != null) {
+//            filterFoods(selectedLocation.getId(), selectedTime.getId(), selectedPrice.getId());
+//        }
+//    }
     private void initBestFood() {
         bestFoodList.clear();
         DatabaseReference myRef = database.getReference("Foods");
@@ -259,83 +270,83 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    private void initLocation() {
-        DatabaseReference myRef = database.getReference("Location");
-        ArrayList<Location> list = new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot issue : snapshot.getChildren()) {
-                        list.add(issue.getValue(Location.class));
-                    }
-
-                    Location allLocation = new Location(0, "All");
-                    list.add(0, allLocation);
-
-                    ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.locationSpinner.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void initTime() {
-        DatabaseReference myRef = database.getReference("Time");
-        ArrayList<Time> list = new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot issue : snapshot.getChildren()) {
-                        list.add(issue.getValue(Time.class));
-                    }
-                    Time allTime = new Time(0, "All");
-                    list.add(0, allTime);
-
-                    ArrayAdapter<Time> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.timeSpinner.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void initPrice() {
-        DatabaseReference myRef = database.getReference("Price");
-        ArrayList<Price> list = new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot issue : snapshot.getChildren()) {
-                        list.add(issue.getValue(Price.class));
-                    }
-
-                    Price allPrice = new Price(0, "All");
-                    list.add(0, allPrice);
-
-                    ArrayAdapter<Price> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.priceSpinner.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
+//    private void initLocation() {
+//        DatabaseReference myRef = database.getReference("Location");
+//        ArrayList<Location> list = new ArrayList<>();
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot issue : snapshot.getChildren()) {
+//                        list.add(issue.getValue(Location.class));
+//                    }
+//
+//                    Location allLocation = new Location(0, "All");
+//                    list.add(0, allLocation);
+//
+//                    ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    binding.locationSpinner.setAdapter(adapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    private void initTime() {
+//        DatabaseReference myRef = database.getReference("Time");
+//        ArrayList<Time> list = new ArrayList<>();
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot issue : snapshot.getChildren()) {
+//                        list.add(issue.getValue(Time.class));
+//                    }
+//                    Time allTime = new Time(0, "All");
+//                    list.add(0, allTime);
+//
+//                    ArrayAdapter<Time> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    binding.timeSpinner.setAdapter(adapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+//
+//    private void initPrice() {
+//        DatabaseReference myRef = database.getReference("Price");
+//        ArrayList<Price> list = new ArrayList<>();
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.exists()) {
+//                    for (DataSnapshot issue : snapshot.getChildren()) {
+//                        list.add(issue.getValue(Price.class));
+//                    }
+//
+//                    Price allPrice = new Price(0, "All");
+//                    list.add(0, allPrice);
+//
+//                    ArrayAdapter<Price> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
+//                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                    binding.priceSpinner.setAdapter(adapter);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
 }

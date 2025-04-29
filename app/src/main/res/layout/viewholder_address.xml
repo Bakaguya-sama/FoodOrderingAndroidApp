@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="12dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp"
+    app:cardUseCompatPadding="true"
+    android:background="@android:color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp">
+
+        <!-- Icon địa chỉ -->
+        <ImageView
+            android:layout_marginStart="4dp"
+            android:id="@+id/img_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/address"
+            app:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Tên địa chỉ (bold) -->
+        <TextView
+            android:id="@+id/txtView_AddressName_ViewholderAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="50E"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toEndOf="@id/img_icon"
+            app:layout_constraintTop_toTopOf="@id/img_icon"
+            app:layout_constraintEnd_toStartOf="@id/txtView_Edit_ViewholderAddress"
+            android:layout_marginStart="8dp"/>
+
+        <!-- Nút Edit -->
+        <TextView
+            android:id="@+id/txtView_Edit_ViewholderAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Edit"
+            android:textColor="#2665AD"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Địa chỉ chi tiết -->
+        <TextView
+            android:id="@+id/txtView_Address_ViewholderAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Gò vấp, Đường Lê Văn Thọ, Phường 11, Go Vap, Ho Chi Minh City, Vietnam"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/txtView_AddressName_ViewholderAddress"
+            app:layout_constraintStart_toStartOf="@id/txtView_AddressName_ViewholderAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Box địa chỉ nhỏ -->
+        <LinearLayout
+            android:id="@+id/linearLayout_AddressBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/txtView_Address_ViewholderAddress"
+            app:layout_constraintStart_toStartOf="@id/txtView_Address_ViewholderAddress"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/txtView_AddressBox_ViewholderAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50E"
+                android:textColor="#2665AD"
+                android:textStyle="bold"
+                android:background="@drawable/address_box"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp" />
+
+            <TextView
+                android:id="@+id/txtView_Default_ViewholderAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/default_box"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="DEFAULT"
+                android:textColor="@color/red"
+                android:textStyle="bold"
+                android:visibility="gone"/> <!-- GONE nếu không có default -->
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="8dp"
+            android:background="#DBDBDB"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout_AddressBox"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

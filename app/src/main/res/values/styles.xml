@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- Cố định chiều cao -->
+        <item name="android:layout_height">?attr/actionBarSize</item> <!-- Hoặc 56dp -->
+
+        <!-- Các thuộc tính khác -->
+        <item name="itemBackground">@drawable/nav_item_background</item>
+        <item name="itemRippleColor">@android:color/transparent</item>
+        <item name="itemIconTint">@color/nav_icon_color</item>
+        <item name="itemTextColor">@color/nav_icon_color</item>
+    </style>
+
+</resources>

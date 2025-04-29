@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_root"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_dialog_rounded"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notification"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Do You Want To Sign Out?"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnAgree_SignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agree"
+            android:background="@drawable/button_agree_blue"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"/>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSkip_SignOut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Skip"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_border_blue"
+            android:textColor="#2665AD"
+            android:textStyle="normal"/>
+
+    </LinearLayout>
+</LinearLayout>

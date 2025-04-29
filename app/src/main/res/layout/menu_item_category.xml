@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="8dp">
+
+    <ImageView
+        android:id="@+id/imageView_CategoryIcon_Menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/textView_CategoryTitle_Menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pizza"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
+</LinearLayout>

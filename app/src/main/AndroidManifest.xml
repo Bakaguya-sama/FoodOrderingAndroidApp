@@ -13,6 +13,39 @@
         android:theme="@style/Theme.FoodOrderingApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.Wishlist_AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChangePassword_AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.EditAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AddingNewAddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AddressActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AccountInformationChangingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.OrderActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AccountActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChangePasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.EmailEnteringActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.CreateAccountActivity"
             android:exported="false" />
         <activity

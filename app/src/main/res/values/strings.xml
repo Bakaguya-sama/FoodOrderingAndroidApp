@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">FoodOrderingApp</string>
+    <string-array name="location_options">
+        <item>Ho Chi Minh City</item>
+        <item>Hanoi City</item>
+    </string-array>
+
+    <string-array name="sort_options">
+        <item>Default</item>
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+
+    <string-array name="gender">
+        <item>Select your gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
 </resources>

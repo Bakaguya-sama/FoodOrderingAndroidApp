@@ -7,4 +7,8 @@
     <color name="red_login">#F75564</color>
     <color name="grey">#F5F5F5</color>
     <color name="blue_grey">#2E4058</color>
+    <color name="grey_menu">#717273</color>
+    <color name="theme_color">#F2F4F8</color>
+    <color name="selected_spinner_blue">#2A83E9</color>
+    <color name="menu_background">#F2F4F8</color>
 </resources>

@@ -57,8 +57,6 @@ Context context;
                       Intent  intent=new Intent(context, DetailActivity.class);
                       intent.putExtra("object", items.get(position));
                       context.startActivity(intent);
-
-
                   }
                   );
     }
