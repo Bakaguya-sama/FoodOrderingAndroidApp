@@ -232,7 +232,7 @@ public class MenuActivity extends BaseActivity {
                         }
                     }
 
-                    // ✅ Nếu đã có category => lọc luôn
+
                     if (currentCategoryId != -1) {
                         filterFoods(
                                 locationSpinner.getSelectedItemPosition(),

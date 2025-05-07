@@ -122,10 +122,12 @@ public class AccountActivity extends BaseActivity {
             }
         });
 
+
         binding.imgViewOrderHistoryAccountAcitvity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //ToDo: Chuyển hướng đến màn hình lịch sử đơn hàng (khác với OrderActivity, tùy)
+                Intent intent=new Intent(AccountActivity.this,OrderActivity.class);
+                startActivity(intent);
             }
         });
 
