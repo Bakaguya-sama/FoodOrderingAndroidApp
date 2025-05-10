@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
@@ -53,7 +54,7 @@
         android:orientation="vertical"
         android:layout_marginTop="8dp" />
 
-    <!-- Status and Reorder Button -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,13 +64,13 @@
 
         <TextView
             android:id="@+id/status"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="DELIVERED"
+            android:text="DELIVERING"
             android:textColor="#6E6E6E"
-            android:textStyle="bold"
-            android:textSize="14sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button2"
@@ -81,4 +82,20 @@
             android:textAllCaps="true"
             android:textSize="14sp" />
     </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/order_received_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/green_background"
+        android:text="Confirm Delivery"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:visibility="visible" />
+
+
 </LinearLayout>

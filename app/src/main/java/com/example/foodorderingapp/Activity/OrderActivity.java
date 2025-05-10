@@ -1,16 +1,13 @@
 package com.example.foodorderingapp.Activity;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -23,16 +20,9 @@ import com.example.foodorderingapp.Adapter.OrderAdapter;
 import com.example.foodorderingapp.Domain.Order;
 import com.example.foodorderingapp.Helper.ManagmentCart;
 import com.example.foodorderingapp.R;
-import com.example.foodorderingapp.databinding.ActivityAccountBinding;
-import com.example.foodorderingapp.databinding.ActivityDetailBinding;
-import com.example.foodorderingapp.databinding.ActivityMainBinding;
 import com.example.foodorderingapp.databinding.ActivityOrderBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,16 +39,15 @@ public class OrderActivity extends BaseActivity {
     private OrderAdapter adapter;
     private ArrayList<Order> orderList;
     private ManagmentCart managmentCart;
-
-
     private ActivityOrderBinding binding;
+
+    // Mặc định lọc theo trạng thái này
+    private String currentStatusFilter = "DELIVERING";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-
-//        binding= ActivityOrderBinding.inflate(getLayoutInflater());
-//        super.setContentView(R.layout.activity_order);
 
         binding = ActivityOrderBinding.inflate(getLayoutInflater());
         setContentViewInBase(binding.getRoot());
@@ -72,70 +61,77 @@ public class OrderActivity extends BaseActivity {
 
 
 
+
         initList();
+        Intent intent = getIntent();
+        String ok = intent.getStringExtra("ok");
 
+        if (ok != null) {
+            Log.d("OrderActivity", "Received: " + ok);
+            currentStatusFilter = "ORDER RECEIVED";
+            binding.deliveringimg.setImageResource(R.drawable.food_delivering);
+            binding.receiveimg.setImageResource(R.drawable.clicked_food_delivered);
+            binding.deliveringTxt.setTextColor(Color.parseColor("#6E6E6E"));
+            binding.receiveTxt.setTextColor(Color.parseColor("#D35400"));
+            filterOrdersByStatus(currentStatusFilter);
 
-
-    }
-    private void deleteAllUserOrders() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
-            return;
+            ok = null;
         }
 
-        String currentUserId = user.getUid();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        // Click - Đang giao hàng
+        binding.deliveringLl.setOnClickListener(v -> {
+            currentStatusFilter = "DELIVERING";
+            binding.deliveringimg.setImageResource(R.drawable.cliked_food_delivering);
+            binding.receiveimg.setImageResource(R.drawable.food_delivered_icon);
+            binding.deliveringTxt.setTextColor(Color.parseColor("#C0392B"));
+            binding.receiveTxt.setTextColor(Color.parseColor("#6E6E6E"));
 
-        // Lấy reference đến collection orders của user
-        CollectionReference ordersRef = db.collection("users")
-                .document(currentUserId)
-                .collection("orders");
+            filterOrdersByStatus(currentStatusFilter);
+        });
 
-        // Lấy tất cả documents trong collection orders
-        ordersRef.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    // Tạo một batch delete
-                    WriteBatch batch = db.batch();
-
-                    // Thêm tất cả documents vào batch delete
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        batch.delete(document.getReference());
-                    }
-
-                    // Thực hiện batch delete
-                    batch.commit()
-                            .addOnSuccessListener(aVoid -> {
-                                // Xóa thành công
-                                Toast.makeText(this, "All orders deleted successfully", Toast.LENGTH_SHORT).show();
-
-                                // Cập nhật UI
-                                orderList.clear();
-                                adapter.notifyDataSetChanged();
-
-                                binding.orderlist.setVisibility(View.GONE);
-                                binding.textView24.setVisibility(View.VISIBLE);
-                                binding.imageView5.setVisibility(View.VISIBLE);
-                            })
-                            .addOnFailureListener(e -> {
-                                // Xóa thất bại
-                                Toast.makeText(this, "Failed to delete orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                Log.e("Firebase", "Error deleting orders", e);
-                            });
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to get orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    Log.e("Firebase", "Error getting orders", e);
-                });
+        // Click - Đã nhận hàng
+        binding.received.setOnClickListener(v -> {
+            currentStatusFilter = "ORDER RECEIVED";
+            binding.deliveringimg.setImageResource(R.drawable.food_delivering);
+            binding.receiveimg.setImageResource(R.drawable.clicked_food_delivered);
+            binding.deliveringTxt.setTextColor(Color.parseColor("#6E6E6E"));
+            binding.receiveTxt.setTextColor(Color.parseColor("#D35400"));
+            filterOrdersByStatus(currentStatusFilter);
+        });
     }
+
+    private void filterOrdersByStatus(String status) {
+        ArrayList<Order> filteredList = new ArrayList<>();
+        for (Order order : orderList) {
+            if (order.getStatus() != null && order.getStatus().equalsIgnoreCase(status)) {
+                filteredList.add(order);
+            }
+        }
+
+        adapter = new OrderAdapter(this, filteredList);
+        binding.orderlist.setAdapter(adapter);
+
+        if (!filteredList.isEmpty()) {
+            binding.orderlist.setVisibility(View.VISIBLE);
+            binding.imageView5.setVisibility(View.GONE);
+            binding.textView24.setVisibility(View.GONE);
+        } else {
+            binding.orderlist.setVisibility(View.GONE);
+            binding.textView24.setVisibility(View.VISIBLE);
+            binding.imageView5.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void initList() {
         orderList = new ArrayList<>();
-        adapter = new OrderAdapter(this, orderList);
+        adapter = new OrderAdapter(this, new ArrayList<>());
         binding.orderlist.setLayoutManager(new LinearLayoutManager(this));
         binding.orderlist.setAdapter(adapter);
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider));
         binding.orderlist.addItemDecoration(dividerItemDecoration);
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
 
@@ -151,6 +147,8 @@ public class OrderActivity extends BaseActivity {
                         Order order = document.toObject(Order.class);
                         orderList.add(order);
                     }
+
+                    // Sắp xếp theo thời gian giảm dần
                     Collections.sort(orderList, (o1, o2) -> {
                         try {
                             SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd,yyyy hh:mm a", Locale.US);
@@ -163,21 +161,46 @@ public class OrderActivity extends BaseActivity {
                         }
                     });
 
-                    if (!orderList.isEmpty()) {
-                        binding.orderlist.setVisibility(View.VISIBLE);
-                        binding.imageView5.setVisibility(View.GONE);
-                        binding.textView24.setVisibility(View.GONE);
-                    } else {
-                        binding.orderlist.setVisibility(View.GONE);
-                        binding.textView24.setVisibility(View.VISIBLE);
-                        binding.imageView5.setVisibility(View.VISIBLE);
-                    }
-
-                    adapter.notifyDataSetChanged();
+                    filterOrdersByStatus(currentStatusFilter); // Lọc đơn hàng theo trạng thái mặc định
                 })
                 .addOnFailureListener(e -> {
                     Log.e("Firebase", "Failed to load orders", e);
                 });
     }
 
+    private void deleteAllUserOrders() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            return;
+        }
+
+        String currentUserId = user.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference ordersRef = db.collection("users")
+                .document(currentUserId)
+                .collection("orders");
+
+        ordersRef.get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    WriteBatch batch = db.batch();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        batch.delete(document.getReference());
+                    }
+
+                    batch.commit()
+                            .addOnSuccessListener(aVoid -> {
+                                orderList.clear();
+                                adapter.notifyDataSetChanged();
+                                binding.orderlist.setVisibility(View.GONE);
+                                binding.textView24.setVisibility(View.VISIBLE);
+                                binding.imageView5.setVisibility(View.VISIBLE);
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.e("Firebase", "Error deleting orders", e);
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firebase", "Error getting orders", e);
+                });
+    }
 }

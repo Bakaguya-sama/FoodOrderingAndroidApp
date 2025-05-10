@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FoodOrderingApp"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.AddressOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.Wishlist_AccountActivity"
             android:exported="false" />
         <activity

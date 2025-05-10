@@ -9,6 +9,7 @@
     app:cardElevation="2dp"
     app:cardCornerRadius="8dp"
     app:cardUseCompatPadding="true"
+    android:descendantFocusability="blocksDescendants"
     android:background="@android:color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,14 +33,13 @@
             android:id="@+id/txtView_AddressName_ViewholderAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="50E"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@id/img_icon"
-            app:layout_constraintTop_toTopOf="@id/img_icon"
             app:layout_constraintEnd_toStartOf="@id/txtView_Edit_ViewholderAddress"
-            android:layout_marginStart="8dp"/>
+            app:layout_constraintStart_toEndOf="@id/img_icon"
+            app:layout_constraintTop_toTopOf="@id/img_icon" />
 
         <!-- Nút Edit -->
         <TextView
@@ -61,13 +61,12 @@
             android:id="@+id/txtView_Address_ViewholderAddress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Gò vấp, Đường Lê Văn Thọ, Phường 11, Go Vap, Ho Chi Minh City, Vietnam"
-            android:textSize="14sp"
+            android:layout_marginTop="4dp"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/txtView_AddressName_ViewholderAddress"
-            app:layout_constraintStart_toStartOf="@id/txtView_AddressName_ViewholderAddress"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="4dp"/>
+            app:layout_constraintStart_toStartOf="@id/txtView_AddressName_ViewholderAddress"
+            app:layout_constraintTop_toBottomOf="@id/txtView_AddressName_ViewholderAddress" />
 
         <!-- Box địa chỉ nhỏ -->
         <LinearLayout
@@ -83,12 +82,11 @@
                 android:id="@+id/txtView_AddressBox_ViewholderAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="50E"
-                android:textColor="#2665AD"
-                android:textStyle="bold"
                 android:background="@drawable/address_box"
                 android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp" />
+                android:paddingVertical="4dp"
+                android:textColor="#2665AD"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtView_Default_ViewholderAddress"

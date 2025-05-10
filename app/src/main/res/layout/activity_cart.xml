@@ -52,177 +52,281 @@
 
                 />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/cardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false" />
-
             <LinearLayout
+                android:id="@+id/btnAddAddress"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="80dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/bg_add_address_button"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/headerBar">
 
-                <EditText
-                    android:id="@+id/editTextText"
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/add"
+                    app:tint="#2665AD" />
+
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/grey_background"
-                    android:ems="10"
-                    android:hint="Enter your code"
-                    android:inputType="text"
-                    android:textAlignment="center"
-                    android:textColor="@color/blue_grey"
-
-
-                    android:textColorHint="@color/blue_grey"
-                    android:textSize="14sp" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/button"
-                    style="@style/textStyle"
-                    android:layout_width="145dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/red_button_background2"
-
-                    android:text="Apply coupon"
-                    android:textColor="@color/white" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Add Address"
+                    android:textColor="#2665AD"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/textView18"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Order summary"
-                android:textColor="@color/blue_grey"
-                android:textSize="18sp"
-                android:textStyle="bold"
-
-                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/grey_background"
 
-                >
+                android:paddingTop="12dp"
+                android:visibility="visible">
 
+                <!-- Icon địa chỉ -->
+                <ImageView
+                    android:id="@+id/img_icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="4dp"
+                    android:src="@drawable/address"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/black" />
+
+                <!-- Tên địa chỉ (bold) -->
                 <TextView
-                    android:id="@+id/textView19"
-                    style="@style/textStyle"
+                    android:id="@+id/txtView_AddressName_ViewholderAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="50E"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/txtView_Edit_ViewholderAddress"
+                    app:layout_constraintStart_toEndOf="@id/img_icon"
+                    app:layout_constraintTop_toTopOf="@id/img_icon" />
+
+                <!-- Nút Edit -->
+                <TextView
+                    android:id="@+id/txtView_Edit_ViewholderAddress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="32dp"
-                    android:text="Subtotal"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="Change"
+                    android:textColor="#2665AD"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- Địa chỉ chi tiết -->
                 <TextView
-                    android:id="@+id/textView21"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/txtView_Address_ViewholderAddress"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-
-                    android:layout_marginTop="8dp"
-                    android:text="Delivery"
-                    app:layout_constraintStart_toStartOf="@+id/textView19"
-                    app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
-                <TextView
-                    android:id="@+id/textView22"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-
-                    android:text="Total Tax"
-                    app:layout_constraintStart_toStartOf="@+id/textView21"
-                    app:layout_constraintTop_toBottomOf="@+id/textView21" />
-
-                <TextView
-                    android:id="@+id/totalFeeTxt"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="$-"
+                    android:layout_marginTop="4dp"
+                    android:text="Gò vấp, Đường Lê Văn Thọ, Phường 11, Go Vap, Ho Chi Minh City, Vietnam"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/textView19" />
+                    app:layout_constraintStart_toStartOf="@id/txtView_AddressName_ViewholderAddress"
+                    app:layout_constraintTop_toBottomOf="@id/txtView_AddressName_ViewholderAddress" />
 
-                <TextView
-                    android:id="@+id/deliveryTxt"
-                    style="@style/textStyle"
+                <!-- Box địa chỉ nhỏ -->
+                <LinearLayout
+                    android:id="@+id/linearLayout_AddressBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="$-"
-                    app:layout_constraintEnd_toEndOf="@+id/totalFeeTxt"
-                    app:layout_constraintTop_toBottomOf="@+id/totalFeeTxt" />
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="@id/txtView_Address_ViewholderAddress"
+                    app:layout_constraintTop_toBottomOf="@id/txtView_Address_ViewholderAddress">
 
-                <TextView
-                    android:id="@+id/taxTxt"
-                    style="@style/textStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="$-"
-                    app:layout_constraintEnd_toEndOf="@+id/deliveryTxt"
-                    app:layout_constraintTop_toBottomOf="@+id/deliveryTxt" />
+                    <TextView
+                        android:id="@+id/txtView_AddressBox_ViewholderAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/address_box"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:text="50E"
+                        android:textColor="#2665AD"
+                        android:textStyle="bold" />
+
+                    <!-- GONE nếu không có default -->
+                </LinearLayout>
 
                 <View
-                    android:id="@+id/view4"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="16dp"
+                    android:id="@+id/divider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="#ABABAB"
+                    android:background="#DBDBDB"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView22" />
-
-                <TextView
-                    android:id="@+id/textView28"
-                    style="@style/textStyleBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Total"
-                    app:layout_constraintStart_toStartOf="@+id/textView22"
-                    app:layout_constraintTop_toBottomOf="@+id/view4" />
-
-                <TextView
-                    android:id="@+id/totalTxt"
-                    style="@style/textStyleBold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="$-"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/taxTxt"
-                    app:layout_constraintTop_toTopOf="@+id/textView28" />
+                    app:layout_constraintTop_toBottomOf="@id/linearLayout_AddressBox" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/placeorderbutton"
-                style="@android:style/Widget.Button"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/red_button_background"
-                android:text="Place order"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:layout_height="380dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false" />
+
 
         </LinearLayout>
     </ScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/placeorderbutton"
+        android:background="@drawable/grey_background"
+
+        >
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Order summary"
+            android:textColor="@color/blue_grey"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/textView19"
+
+
+            />
+        <TextView
+            android:id="@+id/textView19"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
+            android:text="Subtotal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textView18" />
+
+        <TextView
+            android:id="@+id/textView21"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:text="Delivery"
+            app:layout_constraintStart_toStartOf="@+id/textView19"
+            app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+        <TextView
+            android:id="@+id/textView22"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+
+            android:text="Total Tax"
+            app:layout_constraintStart_toStartOf="@+id/textView21"
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+        <TextView
+            android:id="@+id/totalFeeTxt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="$-"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView19" />
+
+        <TextView
+            android:id="@+id/deliveryTxt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="$-"
+            app:layout_constraintEnd_toEndOf="@+id/totalFeeTxt"
+            app:layout_constraintTop_toBottomOf="@+id/totalFeeTxt" />
+
+        <TextView
+            android:id="@+id/taxTxt"
+            style="@style/textStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="$-"
+            app:layout_constraintEnd_toEndOf="@+id/deliveryTxt"
+            app:layout_constraintTop_toBottomOf="@+id/deliveryTxt" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="#ABABAB"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+        <TextView
+            android:id="@+id/textView28"
+            style="@style/textStyleBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Total"
+            app:layout_constraintStart_toStartOf="@+id/textView22"
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
+
+        <TextView
+            android:id="@+id/totalTxt"
+            style="@style/textStyleBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="$-"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/taxTxt"
+            app:layout_constraintTop_toTopOf="@+id/textView28" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/placeorderbutton"
+        style="@android:style/Widget.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/red_button_background"
+        android:padding="8dp"
+        android:text="Place order"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 
     <ImageView
         android:id="@+id/backBtn"

@@ -1,5 +1,6 @@
 package com.example.foodorderingapp.Activity;
 
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodorderingapp.Adapter.CartAdapter;
+import com.example.foodorderingapp.Domain.Address;
 import com.example.foodorderingapp.Domain.Foods;
 import com.example.foodorderingapp.Domain.Order;
 import com.example.foodorderingapp.Domain.orderlist;
@@ -28,6 +30,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 public class CartActivity extends BaseActivity {
@@ -38,20 +41,90 @@ public class CartActivity extends BaseActivity {
     private ManagmentCart managmentCart;
     private double tax;
 
+    private Address addressa=new Address();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityCartBinding.inflate(getLayoutInflater());
 
+        Address receivedAddress = (Address) getIntent().getSerializableExtra("selected_address");
 
+        if (receivedAddress != null) {
+            Log.d("CartActivity", "Received address ID: " + receivedAddress.getAddressId());
+           addressa=receivedAddress;
+           String addressName= addressa.getAddressName();
+           String address=addressa.getAddress();
+           String note=addressa.getNote();
+
+            binding.txtViewAddressNameViewholderAddress.setText(addressName);
+            binding.txtViewAddressViewholderAddress.setText(address);
+            binding.txtViewAddressBoxViewholderAddress.setText(note);
+
+        }
+        else{
+            loadDefaultAddress();
+        }
        setContentView(binding.getRoot());
        managmentCart=new ManagmentCart(this);
        setVariable();
        calculateCart();
        initList();
 
+
        binding.placeorderbutton.setOnClickListener(v -> orderact());
+       binding.txtViewEditViewholderAddress.setOnClickListener(v -> {
+           Intent intent =new Intent(CartActivity.this, AddressOrderActivity.class);
+           startActivity(intent);
+       });
     }
+    private void loadDefaultAddress() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Users").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> addressesMap = (Map<String, Object>) documentSnapshot.get("addresses");
+
+                        if (addressesMap != null) {
+                            for (Map.Entry<String, Object> entry : addressesMap.entrySet()) {
+                                Map<String, Object> addressData = (Map<String, Object>) entry.getValue();
+
+                                boolean isDefault = addressData.get("isDefault") != null && (boolean) addressData.get("isDefault");
+                                if (isDefault) {
+                                    // Lấy thông tin địa chỉ
+                                    String addressName = (String) addressData.get("addressName");
+                                    String address = (String) addressData.get("address");
+                                    String note = (String) addressData.get("note");
+
+
+                                    // Gán vào layout qua binding
+                                    binding.txtViewAddressNameViewholderAddress.setText(addressName);
+                                    binding.txtViewAddressViewholderAddress.setText(address);
+                                    binding.txtViewAddressBoxViewholderAddress.setText(note);
+                                    addressa.setAddress(address);
+                                    addressa.setAddressName(addressName);
+                                    addressa.setNote(note);
+
+
+                                    return; // Chỉ cần 1 địa chỉ mặc định
+                                }
+                            }
+
+                            // Không có địa chỉ mặc định
+                            binding.txtViewAddressNameViewholderAddress.setText("No default address");
+
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to load address: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
 
     private void orderact() {
         if(managmentCart.getListCart().isEmpty()){
@@ -67,6 +140,7 @@ public class CartActivity extends BaseActivity {
             }
             Order order=new Order();
             order.setOrderlists(orderlists);
+            order.setStatus("DELIVERING");
             double percentTax=0.02;
             double delivery=10;
             tax=Math.round((managmentCart.getTotalFee()*percentTax)*100.0)/100;
@@ -78,6 +152,13 @@ public class CartActivity extends BaseActivity {
             Date now = com.google.firebase.Timestamp.now().toDate();
             order.setDate(sdfDate.format(now));
             order.setTime(sdfTime.format(now));
+            if (addressa == null) {
+                Toast.makeText(getApplicationContext(), "Chưa thêm địa chỉ", Toast.LENGTH_SHORT).show();
+            } else {
+                order.setAddress(addressa);
+            }
+
+
 
             String orderId = UUID.randomUUID().toString();
             order.setOrderid(orderId);
@@ -94,7 +175,8 @@ public class CartActivity extends BaseActivity {
                         Log.d("Firebase", "Order added successfully");
                         Toast.makeText(this, "Your order has been placed successfully!", Toast.LENGTH_SHORT).show();
                         binding.cardView.removeAllViews();
-                        finish();
+                         Intent intent=new Intent(CartActivity.this, OrderActivity.class);
+                         startActivity(intent);
 
 
                     })
