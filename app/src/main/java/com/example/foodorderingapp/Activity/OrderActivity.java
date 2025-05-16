@@ -21,6 +21,7 @@ import com.example.foodorderingapp.Domain.Order;
 import com.example.foodorderingapp.Helper.ManagmentCart;
 import com.example.foodorderingapp.R;
 import com.example.foodorderingapp.databinding.ActivityOrderBinding;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -69,35 +70,31 @@ public class OrderActivity extends BaseActivity {
         if (ok != null) {
             Log.d("OrderActivity", "Received: " + ok);
             currentStatusFilter = "ORDER RECEIVED";
-            binding.deliveringimg.setImageResource(R.drawable.food_delivering);
-            binding.receiveimg.setImageResource(R.drawable.clicked_food_delivered);
-            binding.deliveringTxt.setTextColor(Color.parseColor("#6E6E6E"));
-            binding.receiveTxt.setTextColor(Color.parseColor("#D35400"));
             filterOrdersByStatus(currentStatusFilter);
-
+            // Tự động chọn tab "RECEIVED"
+            binding.tabLayout.getTabAt(1).select();
             ok = null;
         }
 
-        // Click - Đang giao hàng
-        binding.deliveringLl.setOnClickListener(v -> {
-            currentStatusFilter = "DELIVERING";
-            binding.deliveringimg.setImageResource(R.drawable.cliked_food_delivering);
-            binding.receiveimg.setImageResource(R.drawable.food_delivered_icon);
-            binding.deliveringTxt.setTextColor(Color.parseColor("#C0392B"));
-            binding.receiveTxt.setTextColor(Color.parseColor("#6E6E6E"));
+// Bắt sự kiện khi chọn tab
+        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    currentStatusFilter = "DELIVERING";
+                } else {
+                    currentStatusFilter = "ORDER RECEIVED";
+                }
+                filterOrdersByStatus(currentStatusFilter);
+            }
 
-            filterOrdersByStatus(currentStatusFilter);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        // Click - Đã nhận hàng
-        binding.received.setOnClickListener(v -> {
-            currentStatusFilter = "ORDER RECEIVED";
-            binding.deliveringimg.setImageResource(R.drawable.food_delivering);
-            binding.receiveimg.setImageResource(R.drawable.clicked_food_delivered);
-            binding.deliveringTxt.setTextColor(Color.parseColor("#6E6E6E"));
-            binding.receiveTxt.setTextColor(Color.parseColor("#D35400"));
-            filterOrdersByStatus(currentStatusFilter);
-        });
     }
 
     private void filterOrdersByStatus(String status) {
@@ -113,14 +110,13 @@ public class OrderActivity extends BaseActivity {
 
         if (!filteredList.isEmpty()) {
             binding.orderlist.setVisibility(View.VISIBLE);
-            binding.imageView5.setVisibility(View.GONE);
-            binding.textView24.setVisibility(View.GONE);
+            binding.emptyLayout.setVisibility(View.GONE);  // Ẩn layout rỗng
         } else {
             binding.orderlist.setVisibility(View.GONE);
-            binding.textView24.setVisibility(View.VISIBLE);
-            binding.imageView5.setVisibility(View.VISIBLE);
+            binding.emptyLayout.setVisibility(View.VISIBLE); // Hiện layout rỗng
         }
     }
+
 
     private void initList() {
         orderList = new ArrayList<>();
