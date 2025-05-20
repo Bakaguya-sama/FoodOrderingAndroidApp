@@ -57,7 +57,7 @@ public class ManagmentCart {
             listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart()-1);
         }
         tinyDB.putListObject("CartList",listItem);
-        changeNumberItemsListener.change();
+        changeNumberItemsListener.changed();
     }
     public void addlist(ArrayList<Foods> listItem){
         tinyDB.remove("CartList");
@@ -69,6 +69,6 @@ public class ManagmentCart {
     public  void plusNumberItem(ArrayList<Foods> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
         listItem.get(position).setNumberInCart(listItem.get(position).getNumberInCart()+1);
         tinyDB.putListObject("CartList",listItem);
-        changeNumberItemsListener.change();
+        changeNumberItemsListener.changed();
     }
 }

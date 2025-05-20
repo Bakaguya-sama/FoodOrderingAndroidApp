@@ -88,40 +88,72 @@ public class EditAddressActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Tạo đối tượng address mới
-                Address newAddress = new Address(addressId, addressName, addressDetail, note, isDefault);
-
-                // Update Firestore
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                 DocumentReference userRef = db.collection("Users").document(userId);
 
-                // Build Map cho address mới
                 Map<String, Object> addressMap = new HashMap<>();
                 addressMap.put("addressName", addressName);
                 addressMap.put("address", addressDetail);
                 addressMap.put("note", note);
                 addressMap.put("isDefault", isDefault);
 
-                // Build Map update
-                Map<String, Object> updates = new HashMap<>();
-                updates.put("addresses." + addressId, addressMap);
+                if (isDefault) {
+                    // Nếu được set là default thì bỏ mặc định các địa chỉ khác trước
+                    userRef.get().addOnSuccessListener(documentSnapshot -> {
+                        Map<String, Object> addresses = (Map<String, Object>) documentSnapshot.get("addresses");
+                        Map<String, Object> updates = new HashMap<>();
 
-                userRef.update(updates)
-                        .addOnSuccessListener(unused -> {
-                            Toast.makeText(EditAddressActivity.this, "Update successfully", Toast.LENGTH_SHORT).show();
-                            // Gửi kết quả về AddressActivity
-                            Intent resultIntent = new Intent();
-                            resultIntent.putExtra("updatedAddress", newAddress);
-                            setResult(RESULT_OK, resultIntent);
-                            finish();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(EditAddressActivity.this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            Log.e("UpdateError", "Failed to update address", e);
-                        });
+                        if (addresses != null) {
+                            for (String key : addresses.keySet()) {
+                                if (!key.equals(addressId)) {
+                                    Map<String, Object> addr = (Map<String, Object>) addresses.get(key);
+                                    addr.put("isDefault", false);
+                                    updates.put("addresses." + key, addr);
+                                }
+                            }
+                        }
+
+                        // Thêm địa chỉ đang được chỉnh sửa vào cập nhật
+                        updates.put("addresses." + addressId, addressMap);
+
+                        // Cập nhật toàn bộ
+                        userRef.update(updates)
+                                .addOnSuccessListener(unused -> {
+                                    Toast.makeText(EditAddressActivity.this, "Update successfully", Toast.LENGTH_SHORT).show();
+                                    Address updatedAddress = new Address(addressId, addressName, addressDetail, note, isDefault);
+                                    Intent resultIntent = new Intent();
+                                    resultIntent.putExtra("updatedAddress", updatedAddress);
+                                    setResult(RESULT_OK, resultIntent);
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(EditAddressActivity.this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Log.e("UpdateError", "Failed to update address", e);
+                                });
+                    });
+                } else {
+                    // Không cần xử lý các địa chỉ khác
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("addresses." + addressId, addressMap);
+
+                    userRef.update(updates)
+                            .addOnSuccessListener(unused -> {
+                                Toast.makeText(EditAddressActivity.this, "Update successfully", Toast.LENGTH_SHORT).show();
+                                Address updatedAddress = new Address(addressId, addressName, addressDetail, note, isDefault);
+                                Intent resultIntent = new Intent();
+                                resultIntent.putExtra("updatedAddress", updatedAddress);
+                                setResult(RESULT_OK, resultIntent);
+                                finish();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(EditAddressActivity.this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.e("UpdateError", "Failed to update address", e);
+                            });
+                }
             }
         });
+
 
 
         binding.imgViewBackEditAddressActivity.setOnClickListener(new View.OnClickListener() {

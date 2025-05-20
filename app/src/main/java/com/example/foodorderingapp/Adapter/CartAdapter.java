@@ -52,16 +52,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
         holder.plusItem.setOnClickListener(v -> managmentCart.plusNumberItem(list,position,()->{
 
             notifyDataSetChanged();
-            changeNumberItemsListener.change();
+            changeNumberItemsListener.changed();
         }));
         holder.minusItem.setOnClickListener(v -> managmentCart.minusNumberItem(list,position,()->{
             notifyDataSetChanged();
-            changeNumberItemsListener.change();
-
-
+            changeNumberItemsListener.changed();
         }));
-
-
     }
 
     @Override
@@ -83,7 +79,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.viewholder> {
             pic=itemView.findViewById(R.id.pic);
             totalEachItem= itemView.findViewById(R.id.totalEachItem);
             num=itemView.findViewById(R.id.numberItemTxt);
-
         }
     }
 }

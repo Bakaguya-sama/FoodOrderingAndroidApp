@@ -76,10 +76,11 @@ public class AddressOrderActivity extends BaseActivity {
 
             updateDefaultAddress(userId, selectedAddressId);
 
-            Intent intent = new Intent(AddressOrderActivity.this, CartActivity.class);
-            intent.putExtra("CALL_METHOD", true);
-            intent.putExtra("selected_address",selectedAddress);
-            startActivity(intent);
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("selected_address", selectedAddress);
+            setResult(RESULT_OK, resultIntent);
+            finish(); // Quay lại CartActivity
+
         });
 
 
