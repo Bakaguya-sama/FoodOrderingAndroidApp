@@ -133,7 +133,7 @@ public class OrderActivity extends BaseActivity {
 
         String currentUserId = user.getUid();
         FirebaseFirestore.getInstance()
-                .collection("users")
+                .collection("Users")
                 .document(currentUserId)
                 .collection("orders")
                 .get()
@@ -172,7 +172,7 @@ public class OrderActivity extends BaseActivity {
 
         String currentUserId = user.getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference ordersRef = db.collection("users")
+        CollectionReference ordersRef = db.collection("Users")
                 .document(currentUserId)
                 .collection("orders");
 

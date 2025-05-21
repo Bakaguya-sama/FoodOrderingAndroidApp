@@ -168,7 +168,7 @@ public class SignupActivity extends BaseActivity {
         user.put("phone", "");
         user.put("addresses", new HashMap<>());
         user.put("wishlist", new HashMap<>());
-        user.put("orders", new HashMap<>());
+//        user.put("orders", new HashMap<>());
 
         db.collection("Users").document(userId)
                 .set(user)

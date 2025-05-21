@@ -83,10 +83,7 @@ public class Order implements Serializable {
         this.orderlists = orderlists;
         this.status=status;
     }
-
     public String time;
     public double total;
-
-
 
 }

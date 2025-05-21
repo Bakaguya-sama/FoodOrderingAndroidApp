@@ -106,6 +106,4 @@ public class ChangePassword_AccountActivity extends BaseActivity {
             isVisible[0] = !isVisible[0];
         });
     }
-
-
 }

@@ -39,7 +39,7 @@ public class IntroActivity extends BaseActivity {
         });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users")
+        db.collection("Users")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -51,7 +51,7 @@ public class IntroActivity extends BaseActivity {
                     }
                 });
 
-        db.collection("users")
+        db.collection("Users")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -244,7 +244,7 @@ public class CartActivity extends BaseActivity {
         ArrayList<Foods> list = managmentCart.getListCart();
         ArrayList<orderlist> orderlists = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            orderlists.add(new orderlist(list.get(i).getTitle(), list.get(i).getNumberInCart(), list.get(i).getId()));
+            orderlists.add(new orderlist(list.get(i).getTitle(), list.get(i).getNumberInCart(), list.get(i).getId(), list.get(i).getPrice(), list.get(i).getImagePath()));
         }
 
         Order order = new Order();
@@ -252,10 +252,19 @@ public class CartActivity extends BaseActivity {
         order.setStatus("DELIVERING");
 
         double percentTax = 0.02;
-        double delivery = 10;
-        tax = Math.round((managmentCart.getTotalFee() * percentTax) * 100.0) / 100;
-        double total = Math.round((managmentCart.getTotalFee() + tax + delivery) * 100) / 100;
+        double delivery = 10.0;
+
+        double itemTotal = managmentCart.getTotalFee();
+        if (Double.isNaN(itemTotal)) {
+            Log.e("CartActivity", "Error: itemTotal is NaN");
+            return;
+        }
+
+        tax = Math.round((itemTotal * percentTax) * 100.0) / 100.0;
+        double total = Math.round((itemTotal + tax + delivery) * 100.0) / 100.0;
+
         order.setTotal(total);
+
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
         SimpleDateFormat sdfTime = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
@@ -273,7 +282,7 @@ public class CartActivity extends BaseActivity {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         FirebaseFirestore.getInstance()
-                .collection("users")
+                .collection("Users")
                 .document(userId)
                 .collection("orders")
                 .document(orderId)
@@ -311,23 +320,31 @@ public class CartActivity extends BaseActivity {
 
 
     }
-    private void calculateCart(){
-        double percentTax=0.02;
-        double delivery=10;
-       tax=Math.round((managmentCart.getTotalFee()*percentTax)*100.0)/100;
-       double total=Math.round((managmentCart.getTotalFee()+tax+delivery)*100)/100;
-       double itemtotal=Math.round(managmentCart.getTotalFee()*100)/100;
+    private void calculateCart() {
+        double percentTax = 0.02;
+        double delivery = 10.0;
 
-       binding.totalFeeTxt.setText("$"+itemtotal);
-       binding.taxTxt.setText("$"+tax);
-       binding.deliveryTxt.setText("$"+delivery);
-       binding.totalTxt.setText("$"+total);
+        double itemTotal = managmentCart.getTotalFee();
+        double tax = itemTotal * percentTax;
+
+        // Làm tròn 2 chữ số thập phân
+        tax = Math.round(tax * 100.0) / 100.0;
+        double total = Math.round((itemTotal + tax + delivery) * 100.0) / 100.0;
+        itemTotal = Math.round(itemTotal * 100.0) / 100.0;
+
+        binding.totalFeeTxt.setText("$" + itemTotal);
+        binding.taxTxt.setText("$" + tax);
+        binding.deliveryTxt.setText("$" + delivery);
+        binding.totalTxt.setText("$" + total);
     }
+
     private void setVariable(){
         binding.backBtn.setOnClickListener(v -> finish());
     }
 
     private void showCustomAddAddressDialog() {
+        if (isFinishing() || isDestroyed()) return; // Tránh leak
+
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom_dialog_addresswarning_cart);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

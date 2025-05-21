@@ -165,6 +165,8 @@ public class EditAddressActivity extends AppCompatActivity {
     }
 
     private void showDeleteAddressDialog(String addressId) {
+        if (isFinishing() || isDestroyed()) return; // Tránh leak
+
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.custom_dialog_delete_address); // Layout của bạn
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // Nền trong suốt

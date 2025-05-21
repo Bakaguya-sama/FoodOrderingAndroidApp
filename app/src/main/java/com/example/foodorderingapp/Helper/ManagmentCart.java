@@ -1,6 +1,7 @@
 package com.example.foodorderingapp.Helper;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 
@@ -42,14 +43,35 @@ public class ManagmentCart {
         return tinyDB.getListObject("CartList");
     }
 
-    public Double getTotalFee(){
-        ArrayList<Foods> listItem=getListCart();
-        double fee=0;
-        for (int i = 0; i < listItem.size(); i++) {
-            fee=fee+(listItem.get(i).getPrice()*listItem.get(i).getNumberInCart());
-        }
-        return fee;
+//    public Double getTotalFee(){
+//        ArrayList<Foods> listItem=getListCart();
+//        double fee=0;
+//        for (int i = 0; i < listItem.size(); i++) {
+//            fee=fee+(listItem.get(i).getPrice()*listItem.get(i).getNumberInCart());
+//        }
+//        return fee;
+//    }
+public Double getTotalFee() {
+    ArrayList<Foods> listItem = getListCart();
+    if (listItem == null) {
+        Log.e("ManagmentCart", "Cart list is null");
+        return 0.0;
     }
+
+    double fee = 0;
+    for (Foods item : listItem) {
+        if (item == null) {
+            Log.e("ManagmentCart", "Item in cart is null");
+            continue;
+        }
+
+        Log.d("ManagmentCart", "Item: " + item.getTitle() + ", Price: " + item.getPrice() + ", Quantity: " + item.getNumberInCart());
+
+        fee += item.getPrice() * item.getNumberInCart();
+    }
+    return fee;
+}
+
     public void minusNumberItem(ArrayList<Foods> listItem,int position,ChangeNumberItemsListener changeNumberItemsListener){
         if(listItem.get(position).getNumberInCart()==1){
             listItem.remove(position);
