@@ -1,0 +1,154 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    android:background="@drawable/card_background"
+    android:padding="16dp"
+    android:elevation="4dp">
+
+    <!-- Status + Reorder -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end|center_vertical"
+        android:layout_marginTop="12dp">
+
+    </LinearLayout>
+
+    <!-- RecyclerView (item orders) -->
+    <com.example.foodorderingapp.Helper.NonScrollableRecyclerView
+        android:id="@+id/recyclerView_ItemOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:nestedScrollingEnabled="false"
+        android:layout_marginTop="8dp" />
+
+    <!-- View All button -->
+    <TextView
+        android:id="@+id/view_all_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View all ▼"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible" />
+
+    <!-- Date - Time - Total Row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Merchandise Subtotal"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/txtView_MerchandiseSubtotal_OrderDetailActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NaN"
+            android:layout_marginEnd="8dp"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tax"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/txtView_Tax_OrderDetailActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NaN"
+            android:layout_marginEnd="8dp"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Shipping Fee"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/txtView_PaymentMethod_OrderDetailActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$10"
+            android:layout_marginEnd="8dp"
+            android:textSize="12sp"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/Total_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33"
+            android:gravity="end"
+            android:text="Total: $27.99"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginEnd="12dp"/>
+    </LinearLayout>
+
+    <!-- Buttons container (only one visible at a time) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="end">
+
+        <!-- Reorder button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="end"
+            android:background="@drawable/red_button_background2"
+            android:text="REORDER"
+            android:textColor="@android:color/white"
+            android:textAllCaps="true"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+</LinearLayout>

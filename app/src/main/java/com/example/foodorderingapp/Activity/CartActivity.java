@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -37,7 +36,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class CartActivity extends BaseActivity {
 
@@ -268,6 +272,11 @@ public class CartActivity extends BaseActivity {
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
         SimpleDateFormat sdfTime = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+
+        // Đặt múi giờ Việt Nam cho cả 2 formatter
+        TimeZone vietnamTimeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+        sdfDate.setTimeZone(vietnamTimeZone);
+        sdfTime.setTimeZone(vietnamTimeZone);
 
         Date now = com.google.firebase.Timestamp.now().toDate();
         order.setDate(sdfDate.format(now));

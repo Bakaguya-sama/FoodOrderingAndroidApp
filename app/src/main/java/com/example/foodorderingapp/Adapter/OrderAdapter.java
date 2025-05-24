@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.foodorderingapp.Activity.CartActivity;
 import com.example.foodorderingapp.Activity.OrderActivity;
+import com.example.foodorderingapp.Activity.OrderDetailActivity;
 import com.example.foodorderingapp.Domain.Foods;
 import com.example.foodorderingapp.Domain.Order;
 import com.example.foodorderingapp.Domain.orderlist;
@@ -169,6 +170,16 @@ public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         }
         addToCart(foodToReorder);
     });
+
+    holder.itemView.setOnClickListener(v -> {
+        Order selectedOrder = orderList.get(position);
+
+        // Truyền dữ liệu sang OrderDetailActivity
+        Intent intent = new Intent(context, OrderDetailActivity.class);
+        intent.putExtra("orderId", selectedOrder.getOrderid());
+        context.startActivity(intent);
+    });
+
 }
 
 

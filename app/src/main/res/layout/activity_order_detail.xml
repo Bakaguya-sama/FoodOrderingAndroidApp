@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.OrderDetailActivity">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/white"
+        android:paddingHorizontal="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/imgView_Back_OrderDetailActivity"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/arrow"
+            android:contentDescription="@null"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Order detail"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/grey_menu"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView_OrderDetailActivity"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@id/headerBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_button_container">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Trạng thái đơn hàng -->
+            <TextView
+                android:id="@+id/txtView_Status_OrderDetailActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your Order is Completed"
+                android:background="#00897B"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:textSize="16sp"
+                android:gravity="center"/>
+
+
+<!--            Địa chỉ nhận hàng-->
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="13dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="16dp">
+
+                    <TextView
+                        android:id="@+id/txtView_Status2_OrderDetailActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Receiving successfully"
+                        android:textColor="#00897B"
+                        android:textSize="14sp"
+                        android:paddingTop="4dp" />
+
+                    <TextView
+                        android:id="@+id/txtView_DeliveryTime_OrderDetailActivity1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NaN"
+                        android:visibility="gone"
+                        android:textSize="14sp"
+                        android:paddingTop="4dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delivery Information"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp" />
+
+            <!-- Hiển thị cardview địa chỉ ở đây -->
+            <include
+                android:id="@+id/include_address"
+                layout="@layout/viewholder_address" />
+
+            <!-- Địa chỉ nhận hàng bằng 1 viewholder ở đây -->
+<!--            <include layout="@layout/item_shipping_address" />-->
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your order"
+                android:textSize="14sp"
+                android:layout_marginStart="20dp"
+                android:textStyle="bold" />
+
+            <!-- Thông tin sản phẩm bằng 1 viewholder ở đây -->
+            <LinearLayout
+                android:id="@+id/linearLayout_productList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Mỗi sản phẩm bạn có thể inflate 1 layout như bên dưới bằng code -->
+                <include
+                    android:id="@+id/include_item_order2"
+                    layout="@layout/your_order_item2" />
+                <!-- Nếu có nhiều sản phẩm, bạn có thể thêm vào LinearLayout này bằng Java/Kotlin -->
+
+            </LinearLayout>
+
+            <!-- Các tùy chọn hỗ trợ -->
+
+            <!-- Mã đơn hàng -->
+            <!-- Thông tin đơn hàng -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@android:color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp"> <!-- giảm từ 12dp còn 8dp -->
+
+                    <!-- Order ID -->
+                    <TextView
+                        android:text="Order ID"
+                        android:textStyle="bold"
+                        android:textSize="13sp"
+                        android:textColor="#000000"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/txtView_OrderID_OrderDetailActivity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="1e0cd47a-629b-485f-87ff-4e303a0f9be1"
+                        android:textSize="13sp"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="8dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textStyle="bold" />
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#333"
+                        android:layout_marginBottom="8dp" />
+
+                    <!-- Payment Method -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Payment Method"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txtView_PaymentMethod_OrderDetailActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cash on Delivery"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+                    </LinearLayout>
+
+                    <!-- Time of Order -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Time of Order"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txtView_TimeOfOrder_OrderDetailActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="May 24, 2025 8:58 AM"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Button ở dưới cùng -->
+    <LinearLayout
+        android:id="@+id/bottom_button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:background="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/btn_BuyAgain_OrderDetailActivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reorder"
+            android:textSize="14sp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            android:backgroundTint="@color/red"
+            android:textColor="#FFF" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
