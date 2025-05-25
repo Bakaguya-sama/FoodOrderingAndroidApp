@@ -179,13 +179,21 @@ public class CartActivity extends BaseActivity {
             binding.layoutOrderSummaryCartActivity.setVisibility(View.GONE);
             binding.placeorderbutton.setVisibility(View.GONE);
             binding.emptyTxt.setVisibility(View.VISIBLE);
+            binding.layoutPaymentMethod.setVisibility(View.GONE);
             return;
         }
+
+        binding.layoutPaymentMethod.setVisibility(View.VISIBLE);
 
         // Kiểm tra địa chỉ đã chọn chưa
         if (addressa.getAddress() == null || addressa.getAddress().trim().isEmpty()) {
             showCustomAddAddressDialog(); // Hiển thị custom dialog
             return; // Không thực hiện đặt hàng nếu chưa có địa chỉ
+        }
+
+        if(!binding.checkboxCod.isChecked()) {
+            Toast.makeText(this, "Please select payment method", Toast.LENGTH_SHORT).show();
+            return;
         }
 
 //            binding.layoutOrderSummaryCartActivity.setVisibility(View.VISIBLE);
@@ -314,13 +322,15 @@ public class CartActivity extends BaseActivity {
         if(managmentCart.getListCart().isEmpty()){
             binding.emptyTxt.setVisibility(View.VISIBLE);
             binding.cardView.setVisibility(View.GONE);
-            binding.placeorderbutton.setVisibility(View.GONE);
+            binding.orderSummaryLayout.setVisibility(View.GONE);
             binding.layoutOrderSummaryCartActivity.setVisibility(View.GONE);
+            binding.layoutPaymentMethod.setVisibility(View.GONE);
         } else {
             binding.emptyTxt.setVisibility(View.GONE);
             binding.cardView.setVisibility(View.VISIBLE);
-            binding.placeorderbutton.setVisibility(View.VISIBLE);
+            binding.orderSummaryLayout.setVisibility(View.VISIBLE);
             binding.layoutOrderSummaryCartActivity.setVisibility(View.VISIBLE);
+            binding.layoutPaymentMethod.setVisibility(View.VISIBLE);
         }
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         binding.cardView.setLayoutManager(linearLayoutManager);
@@ -345,6 +355,7 @@ public class CartActivity extends BaseActivity {
         binding.taxTxt.setText("$" + tax);
         binding.deliveryTxt.setText("$" + delivery);
         binding.totalTxt.setText("$" + total);
+        binding.totalTextView.setText("Total: $" + total);
     }
 
     private void setVariable(){

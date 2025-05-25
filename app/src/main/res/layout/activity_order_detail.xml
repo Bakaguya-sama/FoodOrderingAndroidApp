@@ -107,7 +107,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="NaN"
-                        android:visibility="gone"
                         android:textSize="14sp"
                         android:paddingTop="4dp" />
                 </LinearLayout>
@@ -132,6 +131,7 @@
 <!--            <include layout="@layout/item_shipping_address" />-->
 
             <TextView
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your order"
@@ -245,6 +245,31 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="May 24, 2025 8:58 AM"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+                    </LinearLayout>
+
+                    <!-- Time of Delivery -->
+                    <LinearLayout
+                        android:id="@+id/layout_DeliveryTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="4dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Delivery Time"
+                            android:textSize="13sp"
+                            android:textColor="#000000" />
+
+                        <TextView
+                            android:id="@+id/txtView_DeliveryTime_OrderDetailActivity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="NaN"
                             android:textSize="13sp"
                             android:textColor="#000000" />
                     </LinearLayout>

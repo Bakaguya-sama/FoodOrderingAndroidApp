@@ -40,7 +40,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> {
 
@@ -131,6 +135,18 @@ public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.status.setText(order.getStatus());
         holder.status.setTextColor(Color.parseColor("#4CAF50"));
 
+        SimpleDateFormat sdfDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
+        SimpleDateFormat sdfTime = new SimpleDateFormat("h:mm a", Locale.ENGLISH);
+
+        // Đặt múi giờ Việt Nam cho cả 2 formatter
+        TimeZone vietnamTimeZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+        sdfDate.setTimeZone(vietnamTimeZone);
+        sdfTime.setTimeZone(vietnamTimeZone);
+
+        Date now = com.google.firebase.Timestamp.now().toDate();
+        order.setDeliveryDate(sdfDate.format(now));
+        order.setDeliveryTime(sdfTime.format(now));
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             FirebaseFirestore.getInstance()
@@ -138,7 +154,11 @@ public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                     .document(user.getUid())
                     .collection("orders")
                     .document(order.getOrderid())
-                    .update("status", "ORDER RECEIVED")
+                    .update(
+                            "status", "ORDER RECEIVED",
+                            "DeliveryDate", order.getDeliveryDate(),
+                            "DeliveryTime", order.getDeliveryTime()
+                    )
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(context, "Order marked as received", Toast.LENGTH_SHORT).show();
                         int pos = holder.getAdapterPosition();

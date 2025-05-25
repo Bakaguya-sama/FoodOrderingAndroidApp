@@ -169,7 +169,7 @@ public class OrderDetailActivity extends BaseActivity {
 
                                 Double totalFromDb = documentSnapshot.getDouble("total");
                                 if (totalFromDb != null) {
-                                    itemBinding.TotalValue.setText(String.format("$%.2f", totalFromDb));
+                                    itemBinding.TotalValue.setText(String.format("Total: $%.2f", totalFromDb));
                                 }
 
                                 tax.set(total.get() * 0.02);
@@ -211,11 +211,24 @@ public class OrderDetailActivity extends BaseActivity {
                                     binding.txtViewStatus2OrderDetailActivity.setText("Preparing");
                                     binding.txtViewTimeOfOrderOrderDetailActivity.setText(documentSnapshot.getString("date") + " " + documentSnapshot.getString("time"));
                                     binding.bottomButtonContainer.setVisibility(View.GONE);
+                                    binding.layoutDeliveryTime.setVisibility(View.GONE);
+                                    binding.txtViewDeliveryTimeOrderDetailActivity1.setVisibility(View.GONE);
                                     binding.txtViewStatusOrderDetailActivity.setBackgroundColor(Color.RED);
                                     }
-                                else {
+                                else if (status.equals("ORDER RECEIVED")) {
+                                    binding.txtViewDeliveryTimeOrderDetailActivity1.setVisibility(View.VISIBLE);
+                                    binding.layoutDeliveryTime.setVisibility(View.VISIBLE);
                                     binding.txtViewStatusOrderDetailActivity.setText("Your Order is Completed");
                                     binding.txtViewStatus2OrderDetailActivity.setText("Receiving successfully");
+
+                                    String deliveryDate = documentSnapshot.getString("DeliveryDate");
+                                    String deliveryTime = documentSnapshot.getString("DeliveryTime");
+
+                                    Log.d("DeliveryDebug", "deliveryDate: " + deliveryDate + ", deliveryTime: " + deliveryTime);
+
+                                    binding.txtViewDeliveryTimeOrderDetailActivity.setText(deliveryDate + " " + deliveryTime);
+                                    binding.txtViewDeliveryTimeOrderDetailActivity1.setText(deliveryDate + " " + deliveryTime);
+
                                     binding.txtViewTimeOfOrderOrderDetailActivity.setText(documentSnapshot.getString("date") + " " + documentSnapshot.getString("time"));
                                 }
                             }

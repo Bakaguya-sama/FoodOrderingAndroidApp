@@ -9,6 +9,25 @@ import java.util.Map;
 
 public class Order implements Serializable {
     public Order(){}
+    private String DeliveryTime;
+    private String DeliveryDate;
+
+    public String getDeliveryTime() {
+        return DeliveryTime;
+    }
+
+    public void setDeliveryTime(String deliveryTime) {
+        DeliveryTime = deliveryTime;
+    }
+
+    public String getDeliveryDate() {
+        return DeliveryDate;
+    }
+
+    public void setDeliveryDate(String deliveryDate) {
+        DeliveryDate = deliveryDate;
+    }
+
     public String orderid;
     public ArrayList<orderlist> orderlists;
 
