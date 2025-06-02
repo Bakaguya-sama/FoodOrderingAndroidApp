@@ -137,6 +137,19 @@
                 android:textColor="@color/black"
                 app:buttonTint="#2665AD" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_Map"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+
+                android:background="@drawable/button_rectangle_blue"
+                android:text="Choose from Map"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
     </ScrollView>
 

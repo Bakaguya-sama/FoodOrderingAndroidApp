@@ -1,5 +1,8 @@
 package com.example.foodorderingapp.Activity;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -13,11 +16,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.foodorderingapp.R;
 import com.example.foodorderingapp.databinding.ActivityAccountInformationChangingBinding;
 import com.example.foodorderingapp.databinding.ActivityAddingNewAddressBinding;
+import com.google.common.net.InternetDomainName;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 public class AddingNewAddressActivity extends BaseActivity {
 
@@ -36,12 +42,25 @@ public class AddingNewAddressActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        binding.editTxtAddressAddingNewAddressActivity.setFocusable(false);
+        binding.editTxtAddressAddingNewAddressActivity.setClickable(true);
+
+// Bắt sự kiện click để hiện thông báo
+        binding.editTxtAddressAddingNewAddressActivity.setOnClickListener(v -> {
+            Toast.makeText(this, "Vui lòng chọn địa chỉ từ bản đồ", Toast.LENGTH_SHORT).show();
+        });
+        Intent intent = new Intent(this, MapActivity.class);
+        startActivityForResult(intent, 100);
 
         binding.imgViewBackAddingNewAddressActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
+        });
+        binding.btnMap.setOnClickListener(V->{
+            Intent intena=new Intent(AddingNewAddressActivity.this, MapActivity.class);
+            startActivity(intena);
         });
 
         binding.btnSaveAddingNewAddressActivity.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +104,8 @@ public class AddingNewAddressActivity extends BaseActivity {
                                         .addOnFailureListener(e -> {
                                             Toast.makeText(AddingNewAddressActivity.this, "Error updating old addresses: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                         });
+
+
                             } else {
                                 // Không cần cập nhật địa chỉ cũ
                                 addNewAddress(userId, addressName, address, note, finalIsDefault);
@@ -93,6 +114,7 @@ public class AddingNewAddressActivity extends BaseActivity {
                         .addOnFailureListener(e -> {
                             Toast.makeText(AddingNewAddressActivity.this, "Failed to get existing addresses: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
+
             }
         });
 
@@ -125,4 +147,14 @@ public class AddingNewAddressActivity extends BaseActivity {
                     Toast.makeText(AddingNewAddressActivity.this, "Failed to add address: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            String address = data.getStringExtra("address");
+            binding.editTxtAddressAddingNewAddressActivity.setText(address);
+        }
+    }
+
 }

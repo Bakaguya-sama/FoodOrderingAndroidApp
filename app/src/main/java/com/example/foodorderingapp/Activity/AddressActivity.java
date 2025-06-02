@@ -64,11 +64,7 @@ public class AddressActivity extends BaseActivity {
             intent.putExtra("object", selectedAddress);  // Gửi đối tượng địa chỉ cần chỉnh sửa
             startActivityForResult(intent, 1);  // Gọi EditAddressActivity và nhận kết quả
         });
-        binding.button.setOnClickListener(V->{
-            Intent intent=new Intent(AddressActivity.this, MapActivity.class);
-            startActivity(intent);
 
-        });
 
 
         loadAddresses();
