@@ -59,9 +59,9 @@
         <activity
             android:name=".Activity.MenuActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activity.CreateAccountActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".Activity.CreateAccountActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".Activity.ViewAll_Main_Activity"
             android:exported="false" />
