@@ -150,7 +150,7 @@ public class CartActivity extends BaseActivity {
                                     binding.txtViewAddressNameViewholderAddress.setText(addressName);
                                     binding.txtViewAddressViewholderAddress.setText(address);
                                     binding.txtViewAddressBox.setVisibility(View.VISIBLE);
-                                    binding.txtViewAddressBox.setText(note);
+                                    binding.txtViewAddressBox.setText(addressName);
                                     addressa.setAddress(address);
                                     addressa.setAddressName(addressName);
                                     addressa.setNote(note);

@@ -63,7 +63,7 @@
             <!-- Nội dung form -->
             <TextView
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="28dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Address name"
@@ -86,7 +86,7 @@
 
             <TextView
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Address"
@@ -109,7 +109,7 @@
 
             <TextView
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Note"
@@ -131,7 +131,7 @@
                 android:inputType="text" />
 
             <CheckBox
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:id="@+id/checkbox_EditAddressActivity"
                 android:layout_width="wrap_content"
@@ -139,6 +139,21 @@
                 android:text="Set As Default"
                 android:textColor="@color/black"
                 app:buttonTint="#2665AD" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_Map"
+                android:layout_marginTop="32dp"
+                android:layout_width="160dp"
+                android:layout_gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+
+                android:background="@drawable/button_rectangle_blue"
+                android:text="Choose from Map"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.LocationManager;
+import android.provider.Settings;
 import com.example.foodorderingapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,36 +43,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private String currentAddress = "";
     TextView tvAddress;
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        checkIfLocationIsEnabled();
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        // Kiểm tra xem định vị có được bật chưa
+        checkIfLocationIsEnabled();
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        Button btnAddAddress = findViewById(R.id.btnAddAddress);
-         tvAddress = findViewById(R.id.tvAddress);
+        androidx.appcompat.widget.AppCompatButton btnAddAddress = findViewById(R.id.btnAddAddress);
+        tvAddress = findViewById(R.id.tvAddress);
 
         btnAddAddress.setOnClickListener(v -> {
             if (!currentAddress.isEmpty()) {
 
                 new AlertDialog.Builder(MapActivity.this)
-                        .setTitle("Xác nhận địa chỉ")
-                        .setMessage("Bạn có muốn xác nhận địa chỉ này không?\n\n" + currentAddress)
-                        .setPositiveButton("Xác nhận", (dialog, which) -> {
+                        .setTitle("Address Confirmation")
+                        .setMessage("Do you want to confirm this address?\n\n" + currentAddress)
+                        .setPositiveButton("Confirm", (dialog, which) -> {
                             Intent resultIntent = new Intent();
                             resultIntent.putExtra("address", currentAddress);
                             setResult(RESULT_OK, resultIntent);
                             finish();
                         })
-                        .setNegativeButton("Hủy", null)
+                        .setNegativeButton("Cancel", null)
                         .show();
             } else {
-                Toast.makeText(this, "Không xác định được địa chỉ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Unable to determine the address", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -108,14 +118,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
 
+//        fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
+//            if (location != null) {
+//                currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+//
+//                mMap.clear();
+//                mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Vị trí hiện tại"));
+//                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
+//
+//                Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
+//                try {
+//                    List<Address> addresses = geocoder.getFromLocation(
+//                            location.getLatitude(), location.getLongitude(), 1);
+//                    if (addresses != null && !addresses.isEmpty()) {
+//                        currentAddress = addresses.get(0).getAddressLine(0);
+//                        tvAddress.setText(currentAddress);
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                    tvAddress.setText("Error retrieving current address");
+//                }
+//            } else {
+//                Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
         fusedLocationClient.getLastLocation().addOnSuccessListener(this, location -> {
             if (location != null) {
                 currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
+                // Xóa marker cũ nếu có
                 mMap.clear();
+
+                // ✅ Thêm marker tại vị trí hiện tại
                 mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Vị trí hiện tại"));
+
+                // ✅ Di chuyển camera đến vị trí hiện tại
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
 
+                // ✅ Lấy địa chỉ từ LatLng
                 Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
                 try {
                     List<Address> addresses = geocoder.getFromLocation(
@@ -126,17 +167,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    tvAddress.setText("Không thể lấy địa chỉ hiện tại");
+                    tvAddress.setText("Error retrieving current address");
                 }
             } else {
-                Toast.makeText(this, "Không tìm được vị trí", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show();
             }
+        });
+
+
+        mMap.setOnMyLocationButtonClickListener(() -> {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+
+            fusedLocationClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+                    // Xóa các marker cũ
+                    mMap.clear();
+
+                    // ✅ Đặt marker màu đỏ
+                    mMap.addMarker(new MarkerOptions()
+                            .position(currentLatLng)
+                            .title("Vị trí hiện tại"));
+
+                    // ✅ Di chuyển camera đến đó (tuỳ chọn)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15));
+
+                    // ✅ Lấy địa chỉ
+                    Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
+                    try {
+                        List<Address> addresses = geocoder.getFromLocation(
+                                location.getLatitude(), location.getLongitude(), 1);
+                        if (addresses != null && !addresses.isEmpty()) {
+                            currentAddress = addresses.get(0).getAddressLine(0);
+                            tvAddress.setText(currentAddress);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        tvAddress.setText("Không thể lấy địa chỉ");
+                    }
+                }
+            });
+
+            return false; // Cho Google xử lý tiếp việc di chuyển camera
         });
 
 
         mMap.setOnMapClickListener(latLng -> {
             mMap.clear();
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Vị trí bạn chọn"));
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Selected location"));
             currentLatLng = latLng;
 
             Geocoder geocoder = new Geocoder(MapActivity.this, Locale.getDefault());
@@ -148,12 +230,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     tvAddress.setText(currentAddress);
                 } else {
                     currentAddress = "";
-                    tvAddress.setText("Không tìm thấy địa chỉ");
+                    tvAddress.setText("Address not found");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 currentAddress = "";
-                tvAddress.setText("Lỗi khi lấy địa chỉ");
+                tvAddress.setText("Error retrieving address");
             }
         });
     }
@@ -167,7 +249,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             onMapReady(mMap); // Gọi lại nếu được cấp quyền
         } else {
-            Toast.makeText(this, "Bạn cần cấp quyền vị trí", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You need to grant location permission", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void checkIfLocationIsEnabled() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (!isGpsEnabled && !isNetworkEnabled) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Enable Location")
+                    .setMessage("You need to enable location services to use the map. Do you want to open settings?")
+                    .setPositiveButton("Open settings", (dialog, which) -> {
+                        Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        }
+    }
+
 }

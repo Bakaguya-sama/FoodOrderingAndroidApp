@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
@@ -30,9 +32,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 public class EditAddressActivity extends AppCompatActivity {
 
     private ActivityEditAddressBinding binding;
+    private ActivityResultLauncher<Intent> mapActivityLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +73,24 @@ public class EditAddressActivity extends AppCompatActivity {
             showDeleteAddressDialog(addressId);
         });
 
+        binding.btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditAddressActivity.this, MapActivity.class);
+                mapActivityLauncher.launch(intent); // <- SỬA chỗ này
+            }
+        });
+
+        mapActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        String anotherAddress = result.getData().getStringExtra("address");
+                        Log.d("EditAddressActivity", "Received address: " + anotherAddress);
+                        binding.editTxtAdrressEditAddressActivity.setText(anotherAddress);
+                    }
+                }
+        );
 
 
         binding.btnSaveEditAddressActivity.setOnClickListener(new View.OnClickListener() {
@@ -202,6 +226,4 @@ public class EditAddressActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
-
 }
