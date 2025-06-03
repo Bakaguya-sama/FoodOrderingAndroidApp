@@ -49,8 +49,8 @@ public class AddingNewAddressActivity extends BaseActivity {
         binding.editTxtAddressAddingNewAddressActivity.setOnClickListener(v -> {
             Toast.makeText(this, "Vui lòng chọn địa chỉ từ bản đồ", Toast.LENGTH_SHORT).show();
         });
-        Intent intent = new Intent(this, MapActivity.class);
-        startActivityForResult(intent, 100);
+//        Intent intent = new Intent(this, MapActivity.class);
+//        startActivityForResult(intent, 100);
 
         binding.imgViewBackAddingNewAddressActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,8 +59,8 @@ public class AddingNewAddressActivity extends BaseActivity {
             }
         });
         binding.btnMap.setOnClickListener(V->{
-            Intent intena=new Intent(AddingNewAddressActivity.this, MapActivity.class);
-            startActivity(intena);
+            Intent intent=new Intent(AddingNewAddressActivity.this, MapActivity.class);
+            startActivityForResult(intent, 100);
         });
 
         binding.btnSaveAddingNewAddressActivity.setOnClickListener(new View.OnClickListener() {

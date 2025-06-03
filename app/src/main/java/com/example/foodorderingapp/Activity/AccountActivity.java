@@ -173,7 +173,7 @@ public class AccountActivity extends BaseActivity {
             String currentPassword = editTxt_CurrentPass_DeleteAccount.getText().toString().trim();
 
             if (TextUtils.isEmpty(currentPassword)) {
-                Toast.makeText(this, "Vui lòng nhập mật khẩu hiện tại", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please enter your current password", Toast.LENGTH_SHORT).show();
             } else {
                 deleteAccount(dialog, currentPassword);  // Gọi phiên bản có mật khẩu
             }
@@ -207,20 +207,23 @@ public class AccountActivity extends BaseActivity {
                                                     if (task.isSuccessful()) {
                                                         Toast.makeText(this, "Tài khoản đã được xóa", Toast.LENGTH_SHORT).show();
                                                         auth.signOut();
-                                                        startActivity(new Intent(this, LoginActivity.class));
-                                                        finish();
+
+                                                        // Chuyển sang LoginActivity và xoá back stack
+                                                        Intent intent = new Intent(this, LoginActivity.class);
+                                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                        startActivity(intent);
                                                     } else {
-                                                        Toast.makeText(this, "Xóa tài khoản thất bại. Vui lòng thử lại", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(this, "Delete failed. Try again", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                     })
                                     .addOnFailureListener(e -> {
-                                        Toast.makeText(this, "Lỗi khi xoá dữ liệu người dùng: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(this, "Error deleting user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                     });
                         });
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Mật khẩu không đúng hoặc phiên đăng nhập đã hết hạn", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Current password is incorrect", Toast.LENGTH_SHORT).show();
                     });
         }
     }
@@ -239,10 +242,10 @@ public class AccountActivity extends BaseActivity {
             batch.commit()
                     .addOnSuccessListener(aVoid -> onComplete.run())
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Lỗi khi xoá orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error deleting orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Không thể truy xuất orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Unable to fetch orders: " + e.getMessage(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -275,11 +278,12 @@ public class AccountActivity extends BaseActivity {
         auth.signOut();
 
         // Thông báo cho người dùng đã đăng xuất thành công
-        Toast.makeText(this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Sign out successfully", Toast.LENGTH_SHORT).show();
 
         // Chuyển hướng người dùng đến màn hình đăng nhập
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void loadUserData() {
@@ -298,11 +302,11 @@ public class AccountActivity extends BaseActivity {
                         binding.txtViewUsernameActivityAccount.setText((name == null || name.isEmpty()) ? "Unknown" : name);
 
                     } else {
-                        Toast.makeText(this, "Không tìm thấy thông tin người dùng.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Lỗi khi tải dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error loading user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
