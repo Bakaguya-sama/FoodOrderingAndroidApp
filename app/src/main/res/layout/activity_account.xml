@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/imgView_Avatar_ActivityAccount"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:src="@drawable/final_avatar"
                 android:layout_marginTop="140dp"
                 android:scaleType="centerInside"
@@ -83,9 +83,9 @@
                 android:id="@+id/txtView_Username_ActivityAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="Unknown"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

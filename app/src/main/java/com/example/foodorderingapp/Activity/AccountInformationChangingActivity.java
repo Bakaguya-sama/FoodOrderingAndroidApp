@@ -19,6 +19,7 @@ import com.example.foodorderingapp.R;
 import com.example.foodorderingapp.databinding.ActivityAccountInformationChangingBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import javax.annotation.Nullable;
 
 public class AccountInformationChangingActivity extends BaseActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri imageUri;
     private ActivityAccountInformationChangingBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,50 +87,122 @@ public class AccountInformationChangingActivity extends BaseActivity {
             }
         });
 
-        binding.btnSaveAccountInformationChangingActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String fullname = binding.editTxtFullnameAccountInformationChangingActivity.getText().toString();
-                String phone = binding.editTxtPhoneAccountInformationChangingActivity.getText().toString();
-                String dob = binding.editTxtDateOfBirthAccountInformationChangingActivity.getText().toString();
-                String gender = binding.spinnerGenderAccountInformationChangingActivity.getSelectedItem().toString();
+//        binding.btnSaveAccountInformationChangingActivity.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String fullname = binding.editTxtFullnameAccountInformationChangingActivity.getText().toString();
+//                String phone = binding.editTxtPhoneAccountInformationChangingActivity.getText().toString();
+//                String dob = binding.editTxtDateOfBirthAccountInformationChangingActivity.getText().toString();
+//                String gender = binding.spinnerGenderAccountInformationChangingActivity.getSelectedItem().toString();
+//
+//                if (fullname.isEmpty()) {
+//                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng nhập đầy đủ họ tên", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (phone.isEmpty()) {
+//                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng nhập đầy đủ số điện thoại", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (binding.spinnerGenderAccountInformationChangingActivity.getSelectedItemPosition() == 0) {
+//                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//                Map<String, Object> updates = new HashMap<>();
+//                updates.put("name", fullname);
+//                updates.put("phone", phone);
+//                updates.put("dob", dob);
+//                updates.put("gender", gender);
+//
+//                FirebaseFirestore.getInstance()
+//                        .collection("Users")
+//                        .document(userId)
+//                        .update(updates)
+//                        .addOnSuccessListener(aVoid -> {
+//                            Toast.makeText(AccountInformationChangingActivity.this, "Cập nhật thông tin thành công", Toast.LENGTH_LONG).show();
+//                            loadUserData();
+//                            setResult(RESULT_OK);
+//                        })
+//                        .addOnFailureListener(e -> {
+//                            Toast.makeText(AccountInformationChangingActivity.this, "Lỗi khi cập nhật: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        });
+//            }
+//        });
 
-                if (fullname.isEmpty()) {
-                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng nhập đầy đủ họ tên", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (phone.isEmpty()) {
-                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng nhập đầy đủ số điện thoại", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        binding.btnSaveAccountInformationChangingActivity.setOnClickListener(v -> {
+            String fullname = binding.editTxtFullnameAccountInformationChangingActivity.getText().toString();
+            String phone = binding.editTxtPhoneAccountInformationChangingActivity.getText().toString();
+            String dob = binding.editTxtDateOfBirthAccountInformationChangingActivity.getText().toString();
+            String gender = binding.spinnerGenderAccountInformationChangingActivity.getSelectedItem().toString();
 
-                if (binding.spinnerGenderAccountInformationChangingActivity.getSelectedItemPosition() == 0) {
-                    Toast.makeText(AccountInformationChangingActivity.this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (fullname.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ họ tên", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (phone.isEmpty()) {
+                Toast.makeText(this, "Vui lòng nhập đầy đủ số điện thoại", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (binding.spinnerGenderAccountInformationChangingActivity.getSelectedItemPosition() == 0) {
+                Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("name", fullname);
+            updates.put("phone", phone);
+            updates.put("dob", dob);
+            updates.put("gender", gender);
 
-                Map<String, Object> updates = new HashMap<>();
-                updates.put("name", fullname);
-                updates.put("phone", phone);
-                updates.put("dob", dob);
-                updates.put("gender", gender);
+            if (imageUri != null) {
+                // Upload ảnh lên Firebase Storage
+                FirebaseStorage.getInstance()
+                        .getReference("avatars/" + userId + ".jpg")
+                        .putFile(imageUri)
+                        .addOnSuccessListener(taskSnapshot ->
+                                taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                                    updates.put("avatarUrl", uri.toString());
 
+                                    // Sau khi có URL ảnh, cập nhật Firestore
+                                    FirebaseFirestore.getInstance()
+                                            .collection("Users")
+                                            .document(userId)
+                                            .update(updates)
+                                            .addOnSuccessListener(aVoid -> {
+                                                Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_LONG).show();
+                                                loadUserData();
+                                                setResult(RESULT_OK);
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Toast.makeText(this, "Lỗi khi cập nhật Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            });
+                                })
+                        )
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Lỗi khi upload ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
+            } else {
+                // Không chọn ảnh thì chỉ cập nhật các trường khác
                 FirebaseFirestore.getInstance()
                         .collection("Users")
                         .document(userId)
                         .update(updates)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(AccountInformationChangingActivity.this, "Cập nhật thông tin thành công", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Cập nhật thành công!", Toast.LENGTH_LONG).show();
                             loadUserData();
                             setResult(RESULT_OK);
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(AccountInformationChangingActivity.this, "Lỗi khi cập nhật: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Lỗi khi cập nhật Firestore: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
             }
         });
+
+
         loadUserData();
     }
 
@@ -138,15 +212,15 @@ public class AccountInformationChangingActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
 
-            // Sử dụng Glide để bo tròn và hiển thị ảnh
             Glide.with(this)
                     .load(imageUri)
-                    .circleCrop() // bo tròn ảnh
+                    .circleCrop()
                     .into(binding.imgViewAvatarActivityAccount);
         }
     }
+
 
 
 
@@ -163,12 +237,22 @@ public class AccountInformationChangingActivity extends BaseActivity {
                         String phone = documentSnapshot.getString("phone");
                         String dob = documentSnapshot.getString("dob");
                         String gender = documentSnapshot.getString("gender");
+                        String avatarUrl = documentSnapshot.getString("avatarUrl");
 
                         // Set dữ liệu nếu không null, ngược lại để trống
                         binding.editTxtFullnameAccountInformationChangingActivity.setText(name != null ? name : "");
                         binding.editTxtPhoneAccountInformationChangingActivity.setText(phone != null ? phone : "");
                         binding.editTxtDateOfBirthAccountInformationChangingActivity.setText(dob != null ? dob : "");
                         binding.txtViewUsernameActivityAccount.setText((name == null || name.isEmpty()) ? "Unknown" : name);
+
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(avatarUrl)
+                                    .circleCrop()
+                                    .into(binding.imgViewAvatarActivityAccount);
+                        } else {
+                            binding.imgViewAvatarActivityAccount.setImageResource(R.drawable.final_avatar);
+                        }
 
                         // Set giới tính vào Spinner nếu hợp lệ
                         if (gender != null) {

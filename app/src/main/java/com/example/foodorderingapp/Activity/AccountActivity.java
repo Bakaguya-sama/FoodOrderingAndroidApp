@@ -22,6 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.foodorderingapp.R;
 import com.example.foodorderingapp.databinding.ActivityAccountBinding;
 import com.example.foodorderingapp.databinding.ActivityCartBinding;
@@ -300,6 +301,15 @@ public class AccountActivity extends BaseActivity {
                         // Set dữ liệu nếu không null, ngược lại để trống
 //                        binding.txtViewUsernameActivityAccount.setText(name != null ? name : "Unknown");
                         binding.txtViewUsernameActivityAccount.setText((name == null || name.isEmpty()) ? "Unknown" : name);
+                        String avatarUrl = documentSnapshot.getString("avatarUrl");
+                        if (avatarUrl != null && !avatarUrl.isEmpty()) {
+                            Glide.with(this)
+                                    .load(avatarUrl)
+                                    .circleCrop()
+                                    .into(binding.imgViewAvatarActivityAccount);
+                        } else{
+                            binding.imgViewAvatarActivityAccount.setImageResource(R.drawable.final_avatar);
+                        }
 
                     } else {
                         Toast.makeText(this, "User data not found", Toast.LENGTH_SHORT).show();

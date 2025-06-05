@@ -67,29 +67,58 @@
                 android:scaleType="center"
                 android:src="@drawable/food_theme2" />
 
-            <ImageView
-                android:id="@+id/imgView_Avatar_ActivityAccount"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+<!--            <ImageView-->
+<!--                android:id="@+id/imgView_Avatar_ActivityAccount"-->
+<!--                android:layout_width="100dp"-->
+<!--                android:layout_height="100dp"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:layout_marginTop="-40dp"-->
+<!--                android:scaleType="centerInside"-->
+<!--                android:src="@drawable/final_avatar" />-->
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="-40dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/final_avatar" />
+                android:layout_marginTop="-40dp">
+
+                <!-- Avatar giữ nguyên -->
+                <ImageView
+                    android:id="@+id/imgView_Avatar_ActivityAccount"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/final_avatar" />
+
+                <!-- Biểu tượng bút chì nhỏ -->
+                <ImageView
+                    android:id="@+id/img_edit_avatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/pencil"
+                    android:background="@drawable/circle_white_background"
+                    android:padding="6dp" />
+
+            </FrameLayout>
+
+
 
             <TextView
                 android:id="@+id/txtView_Username_ActivityAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:text="Huy Vu"
+                android:layout_marginTop="4dp"
+                android:text="Unknown"
                 android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <!-- Nội dung form -->
             <TextView
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fullname"
