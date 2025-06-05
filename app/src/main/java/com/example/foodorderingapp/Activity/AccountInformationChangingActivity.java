@@ -1,6 +1,8 @@
 package com.example.foodorderingapp.Activity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.foodorderingapp.R;
 import com.example.foodorderingapp.databinding.ActivityAccountInformationChangingBinding;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +24,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+
+
 public class AccountInformationChangingActivity extends BaseActivity {
+    private static final int PICK_IMAGE_REQUEST = 1;
     private ActivityAccountInformationChangingBinding binding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +41,13 @@ public class AccountInformationChangingActivity extends BaseActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+
+        binding.imgViewAvatarActivityAccount.setOnClickListener(V->{
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
         });
 
         // Adapter cho Location
@@ -116,6 +131,25 @@ public class AccountInformationChangingActivity extends BaseActivity {
         });
         loadUserData();
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+
+            // Sử dụng Glide để bo tròn và hiển thị ảnh
+            Glide.with(this)
+                    .load(imageUri)
+                    .circleCrop() // bo tròn ảnh
+                    .into(binding.imgViewAvatarActivityAccount);
+        }
+    }
+
+
+
     private void loadUserData() {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
